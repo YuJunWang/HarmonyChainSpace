@@ -1,4 +1,5 @@
-import streamlit as st
+import sys
+import os
 
 try:
     __import__('pysqlite3')
@@ -6,6 +7,7 @@ try:
 except ImportError:
     pass
 
+import streamlit as st
 import styles
 from logic import LogicCore
 import time
