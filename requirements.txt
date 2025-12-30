@@ -6,11 +6,11 @@ langchain-google-genai
 langchain-groq
 langchain-openai
 huggingface-hub
-sentence-transformers
-
+sentence-transformers==2.7.0
 chromadb
 tenacity
 pydantic
 google-api-core
 google-generativeai
 google-cloud-core
+pysqlite3-binary
