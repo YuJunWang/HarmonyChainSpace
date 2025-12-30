@@ -1,12 +1,12 @@
 streamlit
 langchain-chroma
+langchain-huggingface
 langchain-community
 langchain-core
 langchain-google-genai
 langchain-groq
 langchain-openai
 huggingface-hub
-sentence-transformers==2.7.0
 chromadb
 tenacity
 pydantic
