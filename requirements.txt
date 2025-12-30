@@ -10,3 +10,6 @@ sentence-transformers
 chromadb
 tenacity
 pydantic
+google-api-core
+google-generativeai
+google-cloud-core
