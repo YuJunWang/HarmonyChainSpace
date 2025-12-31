@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HarmonyChainSpace Final Deck</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+/* 1. GLOBAL RESET & VS CODE THEME BASE */
+* { box-sizing: border-box; }
+
+body {
+    background-color: #121212; /* Darker outer background to make slides pop */
+    display: grid; gap: 40px; grid-template-columns: 1fr;
+    margin: 0; min-height: 100vh; padding: 40px 0; place-items: center;
+    font-family: 'Inter', sans-serif;
+    color: #CCCCCC;
+}
+
+.slide-container {
+    background-color: #1E1E1E; /* STRICT REQUIREMENT */
+    border-radius: 10px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+    display: flex; flex-direction: column;
+    height: 720px; width: 1280px;
+    overflow: hidden; padding: 0; position: relative;
+    border: 1px solid #333;
+}
+
+/* 2. VS CODE WINDOW CHROME */
+.title-bar {
+    height: 35px; width: 100%; background-color: #252526;
+    border-bottom: 1px solid #333; display: flex; align-items: center;
+    justify-content: center; position: absolute; top: 0; left: 0; z-index: 20;
+    font-family: 'Inter', sans-serif; font-size: 13px; color: #999;
+}
+.title-bar::before { content: 'HarmonyChainSpace.py - Visual Studio Code'; }
+
+.status-bar {
+    position: absolute; bottom: 0; left: 0; width: 100%; height: 25px;
+    background-color: #007ACC; display: flex; align-items: center;
+    justify-content: space-between; padding: 0 15px; color: white;
+    font-family: 'Inter', sans-serif; font-size: 12px; z-index: 20;
+}
+.status-bar-group { display: flex; gap: 15px; align-items: center; }
+
+.main-area {
+    margin-top: 35px; margin-bottom: 25px; height: calc(100% - 60px);
+    width: 100%; position: relative; display: flex;
+}
+.activity-bar {
+    width: 50px; height: 100%; background-color: #333333;
+    display: flex; flex-direction: column; align-items: center; padding-top: 15px; gap: 20px;
+    border-right: 1px solid #252526; z-index: 10;
+}
+.activity-bar i { color: #858585; font-size: 24px; opacity: 0.6; }
+.activity-bar i.active { color: #FFFFFF; opacity: 1; border-left: 2px solid white; padding-left: 10px; margin-left: -12px;}
+
+.editor-area {
+    flex-grow: 1; padding: 40px 60px; display: flex; flex-direction: column;
+    position: relative; overflow: hidden;
+}
+
+/* Line Numbers */
+.line-numbers {
+    position: absolute; left: 15px; top: 40px; width: 30px;
+    font-family: 'Fira Code', monospace; color: #858585; opacity: 0.3;
+    text-align: right; line-height: 1.6; font-size: 14px;
+}
+
+/* 3. TYPOGRAPHY & COLORS */
+h1, h2, h3, h4, code, pre { font-family: 'Fira Code', monospace; }
+.slide-title {
+    color: #569CD6; font-size: 36px; font-weight: 500; margin-bottom: 10px; /* Reduced margin for zh-subtitle */
+    display: flex; align-items: center; gap: 10px;
+}
+.slide-title i { color: #CCCCCC; font-size: 28px; }
+
+/* Chinese Concept Subtitle Style */
+.zh-concept {
+    font-size: 14px;
+    color: #6A9955; /* Comment Green for subtle context */
+    margin-bottom: 25px;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.5px;
+}
+
+/* Syntax Highlighting Colors */
+.text-class { color: #4EC9B0; }      /* Green: Classes/Types */
+.text-func { color: #DCDCAA; }       /* Yellow: Functions */
+.text-var { color: #9CDCFE; }        /* Light Blue: Variables */
+.text-key { color: #C586C0; }        /* Purple: Keywords */
+.text-str { color: #CE9178; }        /* Orange: Strings */
+.text-com { color: #6A9955; font-style: italic; } /* Green: Comments */
+.text-num { color: #B5CEA8; }        /* Light Green: Numbers */
+
+/* 4. COMPONENTS */
+
+/* macOS Style Code Window */
+.mac-window {
+    background-color: #1E1E1E; /* Match editor bg for blend, or darker #111 */
+    background-color: #2D2D2D; /* Per instructions: Dark container */
+    border-radius: 8px;
+    border: 1px solid #444;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    overflow: hidden;
+    margin-bottom: 20px;
+    font-family: 'Fira Code', monospace;
+}
+.mac-header {
+    background-color: #3C3C3C; /* Title bar */
+    padding: 8px 12px;
+    display: flex; gap: 8px; align-items: center;
+}
+.dot { width: 12px; height: 12px; border-radius: 50%; }
+.dot.red { background-color: #FF5F56; }
+.dot.yellow { background-color: #FFBD2E; }
+.dot.green { background-color: #27C93F; }
+.mac-title { margin-left: 10px; font-size: 12px; color: #AAA; }
+
+.code-content {
+    padding: 20px;
+    color: #D4D4D4;
+    font-size: 16px;
+    line-height: 1.5;
+    white-space: pre;
+    overflow-x: auto;
+}
+
+/* Grid Background for Cover */
+.grid-bg {
+    background-size: 40px 40px;
+    background-image:
+        linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+}
+
+/* Agent Cards */
+.agent-card {
+    background-color: #252526;
+    border-radius: 6px;
+    padding: 20px;
+    flex: 1;
+    display: flex; flex-direction: column; gap: 10px;
+    border-top: 4px solid transparent;
+    transition: transform 0.2s;
+    height: 100%;
+}
+.agent-card.arch { border-top-color: #569CD6; }
+.agent-card.fs { border-top-color: #C586C0; }
+.agent-card.med { border-top-color: #4EC9B0; }
+
+/* Flow Diagram Nodes */
+.flow-node {
+    background-color: #252526; border: 1px solid #555;
+    padding: 25px 30px; /* Increased padding */
+    border-radius: 6px;
+    text-align: center; color: #EEE; font-weight: 500;
+    min-width: 160px; /* Increased width */
+    position: relative; z-index: 2;
+    font-size: 18px; /* Increased font size */
+}
+.flow-line { 
+    height: 2px; 
+    width: 60px; /* Fixed width for shorter arrows */
+    position: relative; margin: 0 5px; 
+    flex-shrink: 0; /* Prevent shrinking */
+}
+.flow-line::after {
+    content: ''; position: absolute; right: 0; top: -4px;
+    width: 0; height: 0;
+    border-top: 5px solid transparent; border-bottom: 5px solid transparent;
+}
+.flow-line.data { background-color: #569CD6; } /* Data Flow */
+.flow-line.data::after { border-left: 8px solid #569CD6; }
+.flow-line.control { background-color: #4EC9B0; } /* Control Flow */
+.flow-line.control::after { border-left: 8px solid #4EC9B0; }
+
+/* Chat Bubbles */
+.chat-container { display: flex; flex-direction: column; gap: 15px; width: 100%; }
+.bubble {
+    padding: 12px 18px; border-radius: 18px; max-width: 90%;
+    font-size: 16px; line-height: 1.4; position: relative;
+    font-family: 'Inter', sans-serif;
+}
+.bubble.left {
+    background-color: #333; border-bottom-left-radius: 4px; align-self: flex-start;
+    color: #EEE;
+}
+.bubble.right {
+    background-color: #0E639C; border-bottom-right-radius: 4px; align-self: flex-end;
+    color: white;
+}
+.bubble-meta { font-size: 11px; opacity: 0.7; margin-bottom: 4px; display: block; font-family: 'Fira Code', monospace; }
+
+/* Layout Helpers */
+.col-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; height: 100%; align-items: center; }
+.v-center { display: flex; flex-direction: column; justify-content: center; height: 100%; }
+
+/* Skills Grid */
+.skills-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; width: 100%; }
+.skill-box {
+    background-color: #2D2D2D; border: 1px solid #444; border-radius: 8px;
+    padding: 25px; text-align: center;
+}
+.skill-box i { font-size: 40px; margin-bottom: 15px; color: #569CD6; }
+.skill-box h4 { margin: 0 0 10px 0; color: #EEE; }
+.skill-box p { font-size: 14px; color: #AAA; line-height: 1.4; margin: 0; }
+
+</style>
+</head>
+<body>
+
+<!-- Slide 1: Cover (Identity) -->
+<div class="slide-container" id="slide1">
+    <div class="title-bar"></div>
+    <div class="main-area">
+        <div class="activity-bar">
+            <i class="fa-solid fa-files active"></i>
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <i class="fa-solid fa-code-branch"></i>
+        </div>
+        <div class="editor-area grid-bg" style="display: flex; flex-direction: column; justify-content: center; padding-left: 100px;">
+            <div style="margin-bottom: 20px;">
+                <span class="text-key">def</span> <span class="text-func" style="font-size: 64px; font-weight: 700;">HarmonyChainSpace</span><span style="font-size: 64px;">():</span>
+            </div>
+            <div style="font-size: 28px; color: #999; margin-bottom: 10px; padding-left: 40px; border-left: 4px solid #4EC9B0;">
+                <span class="text-str">"Multi-Agent RAG System Implementation"</span>
+            </div>
+            <!-- Added CN Subtitle -->
+            <div style="font-size: 18px; color: #666; margin-bottom: 40px; padding-left: 44px;">
+                // 打造結合邏輯與玄學的衝突解決引擎
+            </div>
+            
+            <!-- Tech Stack Icons in Monospace Box -->
+            <div class="mac-window" style="width: fit-content; min-width: 500px;">
+                <div class="mac-header">
+                    <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+                    <div class="mac-title">speaker_profile.json</div>
+                </div>
+                <div class="code-content">
+{
+  <span class="text-key">"speaker"</span>: <span class="text-str">"Yu-Jun Wang"</span>,
+  <span class="text-key">"role"</span>: <span class="text-str">"AI Application Developer"</span>,
+  <span class="text-key">"stack"</span>: [
+    <span class="text-str">"LangChain"</span>, <span class="text-str">"LCEL"</span>, <span class="text-str">"Synthetic Data"</span>
+  ]
+}
+                </div>
+                <!-- REPLACEMENT: Font Awesome Icon Bar instead of Image -->
+                <div style="background-color: #252526; padding: 15px; display: flex; gap: 30px; justify-content: center; border-top: 1px solid #444;">
+                    <i class="fa-brands fa-python" style="font-size: 32px; color: #569CD6;" title="Python"></i>
+                    <i class="fa-solid fa-link" style="font-size: 32px; color: #CE9178;" title="LangChain"></i>
+                    <i class="fa-solid fa-database" style="font-size: 32px; color: #4EC9B0;" title="Vector DB"></i>
+                    <i class="fa-solid fa-robot" style="font-size: 32px; color: #DCDCAA;" title="Agents"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="status-bar">
+        <div class="status-bar-group"><i class="fa-solid fa-code-branch"></i> main*</div>
+        <div class="status-bar-group"><span>Ln 1, Col 1</span><span>Python 3.10</span></div>
+    </div>
+</div>
+
+<!-- Slide 2: Engineering Goals -->
+<div class="slide-container" id="slide2">
+    <div class="title-bar"></div>
+    <div class="main-area">
+        <div class="activity-bar"><i class="fa-solid fa-bullseye active"></i></div>
+        <div class="editor-area">
+            <div class="line-numbers">1<br>2<br>3<br>4</div>
+            <h2 class="slide-title"><i class="fa-solid fa-layer-group"></i> Engineering_Goals</h2>
+            <div class="zh-concept">// 工程目標：解決結構化法規與非結構化民俗觀點的整合挑戰</div>
+            
+            <div class="col-2">
+                <div class="v-center">
+                    <div class="mac-window">
+                        <div class="mac-header"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div><div class="mac-title">objectives.py</div></div>
+                        <div class="code-content">
+<span class="text-com"># Core Challenge: Logic vs Metaphysics</span>
+
+<span class="text-class">Architecture</span> = <span class="text-str">"Declarative LCEL Workflow"</span>
+
+<span class="text-class">Data_Strategy</span> = <span class="text-str">"Synthetic Data Generation"</span>
+<span class="text-com"># Solving data scarcity in niche domains</span>
+
+<span class="text-class">Stability</span> = <span class="text-str">"Structured Parsers (Pydantic)"</span>
+<span class="text-com"># Taming probabilistic LLM outputs</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Visual Concept: Scales -->
+                <div style="display: flex; justify-content: center; align-items: center; height: 100%; border: 1px dashed #444; border-radius: 8px;">
+                    <div style="text-align: center; opacity: 0.8;">
+                        <i class="fa-solid fa-scale-balanced" style="font-size: 150px; color: #569CD6;"></i>
+                        <div style="display: flex; justify-content: space-between; width: 400px; margin-top: -40px;">
+                            <!-- Symmetrical Boxes with Fixed Size -->
+                            <div style="background: #252526; padding: 20px; border: 1px solid #569CD6; border-radius: 6px; width: 140px; height: 120px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                                <i class="fa-solid fa-book" style="font-size: 32px; margin-bottom: 10px;"></i>
+                                <span style="font-size: 18px; font-weight: bold;">Rules</span>
+                                <div style="font-size: 14px; color: #888; margin-top: 5px;">(法規)</div>
+                            </div>
+                            <div style="background: #252526; padding: 20px; border: 1px solid #CE9178; border-radius: 6px; width: 140px; height: 120px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                                <i class="fa-regular fa-compass" style="font-size: 32px; margin-bottom: 10px;"></i>
+                                <span style="font-size: 18px; font-weight: bold;">Metaphysics</span>
+                                <div style="font-size: 14px; color: #888; margin-top: 5px;">(玄學)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="status-bar">
+        <div class="status-bar-group"><i class="fa-solid fa-circle-exclamation"></i> 0 Errors</div>
+        <div class="status-bar-group">UTF-8</div>
+    </div>
+</div>
+
+<!-- Slide 3: System Architecture -->
+<div class="slide-container" id="slide3">
+    <div class="title-bar"></div>
+    <div class="main-area">
+        <div class="activity-bar"><i class="fa-solid fa-sitemap active"></i></div>
+        <div class="editor-area">
+            <h2 class="slide-title"><i class="fa-solid fa-network-wired"></i> System_Architecture</h2>
+            
+            <div style="flex-grow: 1; display: flex; flex-direction: column; justify-content: center;">
+                <!-- Legend -->
+                <div style="display: flex; gap: 20px; margin-bottom: 40px; justify-content: flex-end; font-size: 14px;">
+                    <div style="display: flex; align-items: center; gap: 8px;"><div style="width: 20px; height: 4px; background: #569CD6;"></div> Data Flow (資料流)</div>
+                    <div style="display: flex; align-items: center; gap: 8px;"><div style="width: 20px; height: 4px; background: #4EC9B0;"></div> Control Flow (控制流)</div>
+                </div>
+
+                <!-- Diagram Container - Centered -->
+                <div style="display: flex; align-items: center; justify-content: center; width: 100%;">
+                    <!-- Node 1 -->
+                    <div class="flow-node">
+                        <i class="fa-solid fa-file-import text-var" style="font-size: 32px; margin-bottom: 8px; display: block;"></i>
+                        Input<br><span style="font-size: 14px; opacity: 0.6;">(Text/Image)</span>
+                    </div>
+                    
+                    <!-- Arrow -->
+                    <div class="flow-line data"></div>
+                    
+                    <!-- Node 2 -->
+                    <div class="flow-node" style="border-color: #C586C0;">
+                        <i class="fa-solid fa-brain text-key" style="font-size: 32px; margin-bottom: 8px; display: block;"></i>
+                        Brain<br><span style="font-size: 14px; opacity: 0.6;">(LangChain Router)</span>
+                    </div>
+                    
+                    <!-- Arrow -->
+                    <div class="flow-line control"></div>
+                    
+                    <!-- Node 3 -->
+                    <div class="flow-node" style="border-color: #4EC9B0;">
+                        <i class="fa-solid fa-database text-class" style="font-size: 32px; margin-bottom: 8px; display: block;"></i>
+                        Memory<br><span style="font-size: 14px; opacity: 0.6;">(RAG Pipelines)</span>
+                    </div>
+                    
+                    <!-- Arrow -->
+                    <div class="flow-line data"></div>
+                    
+                    <!-- Node 4 -->
+                    <div class="flow-node" style="border-color: #CE9178;">
+                        <i class="fa-solid fa-desktop text-str" style="font-size: 32px; margin-bottom: 8px; display: block;"></i>
+                        Output<br><span style="font-size: 14px; opacity: 0.6;">(UI + GenAI)</span>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 40px; font-family: 'Fira Code', monospace; color: #666; font-size: 12px;">
+                    Fig 1.0 - High Level Data & Control Flow<br>
+                    <span style="font-size: 14px; color: #555;">(架構總覽：輸入處理 -> 路由分發 -> 混合檢索 -> 生成輸出)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="status-bar"><div class="status-bar-group">Diagram Rendered</div></div>
+</div>
+
+<!-- Slide 4: RAG Strategy I - Data Engineering -->
+<div class="slide-container" id="slide4">
+    <div class="title-bar"></div>
+    <div class="main-area">
+        <div class="activity-bar"><i class="fa-solid fa-database active"></i></div>
+        <div class="editor-area">
+            <h2 class="slide-title"><i class="fa-solid fa-flask"></i> RAG_Strategy_I: Data_Eng</h2>
+            <div class="zh-concept">// 資料工程：法規文檔與合成場景的異質處理流程</div>
+            
+            <div class="col-2">
+                <!-- Left: Real World Data -->
+                <div class="mac-window" style="height: 100%;">
+                    <div class="mac-header"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div><div class="mac-title">regulations.pdf (真實法規)</div></div>
+                    <div class="code-content">
+<span class="text-com"># Source: Government Regulations</span>
+<span class="text-class">Type</span>: Structured / PDF
+
+<span class="text-key">PROCESS</span>:
+1. Optical Character Recognition (OCR)
+2. Semantic Chunking (by Article)
+3. Embedding (<span class="text-str">"text-embedding-3-small"</span>)
+
+<span class="text-com"># Characteristics:</span>
+<span class="text-var">>></span> Rigid, Logical, Fact-based.
+                    </div>
+                </div>
+                
+                <!-- Right: Synthetic Data Pipeline -->
+                <div class="mac-window" style="height: 100%;">
+                    <div class="mac-header"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div><div class="mac-title">synthetic_gen.py (合成數據)</div></div>
+                    <div class="code-content">
+<span class="text-com"># Source: Generative Metaphysics (Feng Shui)</span>
+<span class="text-class">Type</span>: Unstructured / Scenarios
+
+<span class="text-key">def</span> <span class="text-func">Data_Augmentation_Process</span>():
+    <span class="text-var">raw_text</span> = <span class="text-str">"Lu Ban Jing (Ancient)"</span>
+    
+    <span class="text-var">modern_text</span> = <span class="text-func">LLM_Translate</span>(raw_text)
+    
+    <span class="text-var">scenarios</span> = <span class="text-func">Generate_Scenarios</span>(modern_text)
+    <span class="text-com"># e.g., "Apartment facing elevator..."</span>
+    
+    <span class="text-key">return</span> <span class="text-func">Embed</span>(scenarios)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="status-bar"><div class="status-bar-group">Processing...</div></div>
+</div>
+
+<!-- Slide 5: Retrieval Implementation -->
+<div class="slide-container" id="slide5">
+    <div class="title-bar"></div>
+    <div class="main-area">
+        <div class="activity-bar"><i class="fa-solid fa-magnifying-glass active"></i></div>
+        <div class="editor-area">
+            <h2 class="slide-title"><i class="fa-solid fa-code"></i> RAG_Strategy_II: Retrieval</h2>
+            <div class="zh-concept">// 檢索策略：混合動態上下文注入 (Dynamic Mixing)</div>
+            <p style="margin-bottom: 20px; color: #AAA; font-size: 16px;">Dynamic merging of heterogeneous data sources to provide comprehensive context.</p>
+            
+            <div class="mac-window">
+                <div class="mac-header"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div><div class="mac-title">retrieval_logic.py</div></div>
+                <div class="code-content">
+<span class="text-key">class</span> <span class="text-class">DualRetriever</span>:
+    <span class="text-key">def</span> <span class="text-func">get_rag_context</span>(<span class="text-var">self</span>, <span class="text-var">query</span>: <span class="text-class">str</span>) -> <span class="text-class">str</span>:
+        <span class="text-com"># Parallel Search (平行檢索)</span>
+        <span class="text-var">law_docs</span> = <span class="text-var">self</span>.law_db.<span class="text-func">similarity_search</span>(<span class="text-var">query</span>, k=3)
+        <span class="text-var">fs_docs</span> = <span class="text-var">self</span>.fengshui_db.<span class="text-func">similarity_search</span>(<span class="text-var">query</span>, k=3)
+        
+        <span class="text-com"># Dynamic Context Mixing (動態權重混合)</span>
+        <span class="text-var">context</span> = <span class="text-str">f"""
+        Legal Context:
+        <span class="text-var">{law_docs}</span>
+        
+        Metaphysical Context:
+        <span class="text-var">{fs_docs}</span>
+        """</span>
+        
+        <span class="text-key">return</span> <span class="text-var">context</span>
+                </div>
+            </div>
+            
+            <div style="font-size: 14px; color: #888; display: flex; gap: 20px;">
+                <span><i class="fa-solid fa-microchip"></i> Model: all-MiniLM-L6-v2</span>
+                <span><i class="fa-solid fa-bolt"></i> Latency: ~120ms</span>
+            </div>
+        </div>
+    </div>
+    <div class="status-bar"><div class="status-bar-group">Ready</div></div>
+</div>
+
+<!-- Slide 6: Why LCEL? -->
+<div class="slide-container" id="slide6">
+    <div class="title-bar"></div>
+    <div class="main-area">
+        <div class="activity-bar"><i class="fa-solid fa-code-compare active"></i></div>
+        <div class="editor-area">
+            <h2 class="slide-title"><i class="fa-solid fa-pipes-fluid"></i> Why_LCEL?</h2>
+            <div class="zh-concept">// 技術選擇：從傳統鏈式結構轉向聲明式管線 (Declarative Pipe)</div>
+            
+            <div class="col-2">
+                <!-- Legacy -->
+                <div class="v-center">
+                    <h3 style="color: #CE9178; margin-bottom: 10px;"><i class="fa-solid fa-xmark"></i> Legacy Chain</h3>
+                    <div class="mac-window">
+                        <div class="mac-header"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div><div class="mac-title">old_chain.py</div></div>
+                        <div class="code-content">
+<span class="text-var">chain</span> = <span class="text-class">SequentialChain</span>(
+    <span class="text-var">chains</span>=[a, b, c],
+    <span class="text-var">input_variables</span>=[<span class="text-str">"..."</span>],
+    <span class="text-var">verbose</span>=<span class="text-key">True</span>
+)
+<span class="text-com"># Issues:</span>
+<span class="text-com"># - Hard to debug (除錯困難)</span>
+<span class="text-com"># - Hidden state (隱藏狀態)</span>
+<span class="text-com"># - Class-based boilerplate</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- LCEL -->
+                <div class="v-center">
+                    <h3 style="color: #4EC9B0; margin-bottom: 10px;"><i class="fa-solid fa-check"></i> LCEL (Expression)</h3>
+                    <div class="mac-window">
+                        <div class="mac-header"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div><div class="mac-title">new_pipeline.py</div></div>
+                        <div class="code-content">
+<span class="text-var">chain</span> = (
+    {<span class="text-str">"context"</span>: retriever, <span class="text-str">"query"</span>: <span class="text-class">RunnablePassthrough</span>()}
+    | prompt
+    | model
+    | <span class="text-class">StrOutputParser</span>()
+)
+<span class="text-com"># Benefits:</span>
+<span class="text-com"># - Unix Pipe Style (|) (管線風格)</span>
+<span class="text-com"># - Streaming built-in (原生串流)</span>
+<span class="text-com"># - Highly readable</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="status-bar"><div class="status-bar-group">Refactoring Complete</div></div>
+</div>
+
+<!-- Slide 7: Multi-Agent Workflow -->
+<div class="slide-container" id="slide7">
+    <div class="title-bar"></div>
+    <div class="main-area">
+        <div class="activity-bar"><i class="fa-solid fa-users active"></i></div>
+        <div class="editor-area">
+            <h2 class="slide-title"><i class="fa-solid fa-user-group"></i> Multi-Agent_Workflow</h2>
+            <div class="zh-concept">// 多代理人協作：結構審查、民俗禁忌與辯證綜合</div>
+            
+            <div style="display: flex; gap: 30px; height: 60%;">
+                <!-- Agent A -->
+                <div class="agent-card arch">
+                    <h3 class="text-var" style="margin: 0;"><i class="fa-solid fa-ruler-combined"></i> Architect</h3>
+                    <div style="font-size: 13px; color: #888; font-family: 'Fira Code', monospace;">Temp: 0.2 [建築師]</div>
+                    <div class="mac-window" style="margin-top: auto; margin-bottom: 0;">
+                        <div class="code-content" style="padding: 10px; font-size: 13px;">
+<span class="text-key">Role</span>: <span class="text-str">"Structure"</span>
+<span class="text-key">Prompt</span>: <span class="text-str">"Strict adherence to building codes and physical feasibility."</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Agent B -->
+                <div class="agent-card fs">
+                    <h3 class="text-key" style="margin: 0;"><i class="fa-solid fa-yin-yang"></i> Feng Shui</h3>
+                    <div style="font-size: 13px; color: #888; font-family: 'Fira Code', monospace;">Temp: 0.7 [風水師]</div>
+                    <div class="mac-window" style="margin-top: auto; margin-bottom: 0;">
+                        <div class="code-content" style="padding: 10px; font-size: 13px;">
+<span class="text-key">Role</span>: <span class="text-str">"Energy (Qi)"</span>
+<span class="text-key">Prompt</span>: <span class="text-str">"Focus on cultural taboos and energy flow."</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Connector Arrows -->
+            <div style="display: flex; justify-content: center; height: 40px; align-items: center; gap: 200px; color: #555;">
+                <i class="fa-solid fa-arrow-down-long" style="font-size: 24px;"></i>
+                <i class="fa-solid fa-arrow-down-long" style="font-size: 24px;"></i>
+            </div>
+            
+            <!-- Mediator -->
+            <div class="agent-card med" style="height: auto; align-items: center; flex-direction: row; gap: 40px; justify-content: center;">
+                <div>
+                    <h3 class="text-class" style="margin: 0;"><i class="fa-solid fa-handshake"></i> Agent C: Mediator</h3>
+                    <div style="font-size: 13px; color: #888; font-family: 'Fira Code', monospace;">Logic: Dialectic Synthesis [協調者]</div>
+                </div>
+                <div style="font-family: 'Fira Code', monospace; color: #CCC; font-size: 14px;">
+                    <span class="text-func">Synthesize</span>(A_Output, B_Output) -> <span class="text-str">"Balanced Solution"</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="status-bar"><div class="status-bar-group">Agents Online</div></div>
+</div>
+
+<!-- Slide 8: Stability - Structured Output -->
+<div class="slide-container" id="slide8">
+    <div class="title-bar"></div>
+    <div class="main-area">
+        <div class="activity-bar"><i class="fa-solid fa-shield-cat active"></i></div>
+        <div class="editor-area">
+            <h2 class="slide-title"><i class="fa-solid fa-file-shield"></i> Stability: Structured_Output</h2>
+            <div class="zh-concept">// 系統穩定性：利用 Pydantic 強制輸出格式與類型檢查</div>
+            
+            <div class="col-2">
+                <div class="v-center">
+                    <div style="margin-bottom: 30px;">
+                        <h3 class="text-str">Pain Point:</h3>
+                        <p>LLM output is probabilistic strings. Parsing fails if the model is "chatty" or adds markdown ticks.</p>
+                        <p class="zh-concept" style="margin-top: 5px; font-size: 13px;">(痛點：LLM 輸出不可控，導致解析錯誤)</p>
+                    </div>
+                    <div>
+                        <h3 class="text-class">Solution:</h3>
+                        <p>Enforce schema validation at the generation step, not just post-processing.</p>
+                        <p class="zh-concept" style="margin-top: 5px; font-size: 13px;">(解法：在生成階段強制執行 Schema 驗證)</p>
+                    </div>
+                </div>
+                
+                <div class="v-center">
+                    <div class="mac-window">
+                        <div class="mac-header"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div><div class="mac-title">schemas.py</div></div>
+                        <div class="code-content">
+<span class="text-key">from</span> langchain_core.pydantic_v1 <span class="text-key">import</span> BaseModel, Field
+
+<span class="text-key">class</span> <span class="text-class">MediatorResponse</span>(<span class="text-class">BaseModel</span>):
+    <span class="text-var">verdict</span>: <span class="text-class">str</span> = <span class="text-func">Field</span>(
+        description=<span class="text-str">"Final advice for user"</span>
+    )
+    <span class="text-var">image_prompt</span>: <span class="text-class">str</span> = <span class="text-func">Field</span>(
+        description=<span class="text-str">"Optimized prompt for Flux AI"</span>
+    )
+
+<span class="text-var">parser</span> = <span class="text-class">PydanticOutputParser</span>(
+    pydantic_object=<span class="text-class">MediatorResponse</span>
+)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="status-bar"><div class="status-bar-group">Schema Validated</div></div>
+</div>
+
+<!-- Slide 9: Demo -->
+<div class="slide-container" id="slide9">
+    <div class="title-bar"></div>
+    <div class="main-area">
+        <div class="activity-bar"><i class="fa-solid fa-mobile-screen active"></i></div>
+        <div class="editor-area">
+            <h2 class="slide-title"><i class="fa-solid fa-play"></i> Live_Demo: "Chuan_Tang_Sha"</h2>
+            <div class="zh-concept" style="margin-bottom: 20px;">// 實境演示：針對「穿堂煞」案例的跨領域衝突調解</div>
+            
+            <div class="col-2">
+                <!-- Chat Interface -->
+                <div class="chat-container">
+                    <div class="bubble left">
+                        <span class="bubble-meta text-var">Architect (建築師)</span>
+                        Good for ventilation. Compliant with Law Art. 43. Structure is sound.
+                    </div>
+                    <div class="bubble left" style="border-left: 3px solid #C586C0;">
+                        <span class="bubble-meta text-key">Feng Shui (風水師)</span>
+                        <i class="fa-solid fa-triangle-exclamation text-str"></i> Wealth leakage risk! The Qi flows out directly through the balcony.
+                    </div>
+                    <div class="bubble right">
+                        <span class="bubble-meta text-class">Mediator (系統建議)</span>
+                        Recommendation: Install a <strong>translucent screen</strong> (Buffer Zone).
+                        <br><br>
+                        1. Retains light (Legal compliance).<br>
+                        2. Slows Qi flow (Metaphysical harmony).
+                    </div>
+                </div>
+                
+                <!-- App Placeholder REPLACEMENT: Drawn CSS UI -->
+                <div style="background-color: #000; height: 100%; border-radius: 20px; border: 4px solid #333; display: flex; flex-direction: column; overflow: hidden; position: relative;">
+                    <!-- Phone Notch -->
+                    <div style="background: #333; height: 20px; width: 120px; margin: 0 auto; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;"></div>
+                    
+                    <div style="flex-grow: 1; display: flex; flex-direction: column; background: #1a1a1a; color: #555; position: relative;">
+                         <!-- Fake App Header -->
+                         <div style="height: 50px; border-bottom: 1px solid #333; display: flex; align-items: center; justify-content: space-between; padding: 0 20px;">
+                             <i class="fa-solid fa-bars"></i>
+                             <span style="color: #AAA; font-size: 14px;">HarmonyChain App</span>
+                             <i class="fa-solid fa-user"></i>
+                         </div>
+                         
+                         <!-- Blueprint Visual -->
+                         <div style="flex-grow: 1; display: flex; align-items: center; justify-content: center; background-image: radial-gradient(#2a2a2a 1px, transparent 1px); background-size: 20px 20px;">
+                             <div style="border: 2px dashed #569CD6; width: 60%; height: 50%; position: relative; display: flex; align-items: center; justify-content: center;">
+                                 <span style="position: absolute; top: -20px; left: 0; color: #569CD6; font-size: 12px;">Floor Plan: Generated</span>
+                                 <!-- The Buffer Zone -->
+                                 <div style="width: 10px; height: 80%; background: rgba(78, 201, 176, 0.3); border: 1px solid #4EC9B0; margin-right: 20px;"></div>
+                                 <i class="fa-regular fa-map" style="font-size: 48px; color: #444;"></i>
+                                 <div style="position: absolute; bottom: 10px; color: #4EC9B0; font-size: 12px; background: rgba(0,0,0,0.8); padding: 4px 8px; border-radius: 4px;">
+                                     Buffer Zone Applied
+                                 </div>
+                             </div>
+                         </div>
+                         
+                         <!-- Fake Controls -->
+                         <div style="height: 60px; border-top: 1px solid #333; display: flex; align-items: center; justify-content: center; gap: 40px;">
+                             <i class="fa-solid fa-rotate-left"></i>
+                             <div style="width: 50px; height: 50px; background: #569CD6; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-top: -30px; box-shadow: 0 4px 10px rgba(0,0,0,0.5);">
+                                 <i class="fa-solid fa-wand-magic-sparkles" style="color: white;"></i>
+                             </div>
+                             <i class="fa-solid fa-share-nodes"></i>
+                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="status-bar"><div class="status-bar-group">Running...</div></div>
+</div>
+
+<!-- Slide 10: Summary & Skills -->
+<div class="slide-container" id="slide10">
+    <div class="title-bar"></div>
+    <div class="main-area">
+        <div class="activity-bar"><i class="fa-solid fa-list-check active"></i></div>
+        <div class="editor-area">
+            
+            <!-- Contact/QR Header (Top Right Absolute) - Enlarged -->
+            <div style="position: absolute; top: 30px; right: 60px; display: flex; gap: 25px; align-items: center; text-align: right; z-index: 10;">
+                <div>
+                    <h3 style="margin: 0; color: #FFF; font-size: 32px;">Thank You</h3>
+                    <p style="margin: 5px 0 0 0; color: #888; font-size: 20px;">Yu-Jun Wang</p>
+                    <p style="margin: 0; color: #569CD6; font-size: 16px; font-family: 'Fira Code';">github.com/YuJunWang</p>
+                </div>
+                <div style="background: white; width: 120px; height: 120px; padding: 5px;">
+                     <!-- REPLACEMENT: Public QR Code API -->
+                     <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://github.com/YuJunWang&color=000000&bgcolor=ffffff" style="width: 100%; height: 100%;" alt="QR Code">
+                </div>
+            </div>
+
+            <h2 class="slide-title"><i class="fa-solid fa-clipboard-check"></i> Summary_&_Skills</h2>
+            <div class="zh-concept">// 總結：核心產出與全端 AI 技術矩陣</div>
+            
+            <div style="margin-bottom: 30px;">
+                <h3 class="text-func">Key_Takeaways = [</h3>
+                <ul style="font-family: 'Fira Code', monospace; color: #D4D4D4;">
+                    <li><span class="text-str">"LCEL for production-grade pipelines"</span>,</li>
+                    <li><span class="text-str">"Synthetic Data for domain adaptation"</span>,</li>
+                    <li><span class="text-str">"Reliability via Pydantic & Multi-Agent"</span></li>
+                </ul>
+                <h3 class="text-func">]</h3>
+            </div>
+            
+            <div class="skills-grid">
+                <div class="skill-box">
+                    <i class="fa-brands fa-python"></i>
+                    <h4>Backend</h4>
+                    <p>Python, FastAPI<br>LangChain, Pydantic</p>
+                </div>
+                <div class="skill-box">
+                    <i class="fa-solid fa-brain"></i>
+                    <h4>AI Models</h4>
+                    <p>Gemini \ Groq<br>HuggingFace<br>Stable Diffusion</p>
+                </div>
+                <div class="skill-box">
+                    <i class="fa-brands fa-git-alt"></i>
+                    <h4>Tools</h4>
+                    <p>Git, Docker<br>Streamlit, VS Code</p>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <div class="status-bar"><div class="status-bar-group">End of File</div></div>
+</div>
+
+</body>
+</html>
