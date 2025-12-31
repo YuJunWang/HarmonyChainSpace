@@ -8,6 +8,8 @@
 > **"Bridging the gap between Architectural Science and Feng Shui Metaphysics."**
 > 當理性的建築法規，遇上感性的風水哲學——透過 AI 多代理人系統，尋求空間設計的最佳平衡點。
 
+[![Watch Presentation](https://img.shields.io/badge/View-Presentation-orange?style=for-the-badge&logo=html5)](https://yujunwang.github.io/HarmonyChainSpace/)
+
 ## 📖 專案簡介 (Introduction)
 
 **HarmonyChainSpace** 是一個基於 **LangChain** 框架開發的 **多代理人協作系統 (Multi-Agent System)**。
