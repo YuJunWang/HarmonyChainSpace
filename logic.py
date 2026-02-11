@@ -155,7 +155,7 @@ class LogicCore:
 
         prompt = ChatPromptTemplate.from_template(template)
         chain = prompt | llm | StrOutputParser()
-        return chain.invoke({"context": context, "query": query})
+        return chain.invoke({"context": context, "question": query})
 
     # --- 🔮 Agent 2: 風水大師 ---
     def run_fengshui_agent(self, context, query, provider, api_key, model_name):
@@ -193,7 +193,7 @@ class LogicCore:
 
         prompt = ChatPromptTemplate.from_template(template)
         chain = prompt | llm | StrOutputParser()
-        return chain.invoke({"context": context, "query": query})
+        return chain.invoke({"context": context, "question": query})
 
     # --- 🤝 Agent 3: 協調設計師 ---
     def run_mediator_agent(self, arch_res, fs_res, query, style, provider, api_key, model_name):
